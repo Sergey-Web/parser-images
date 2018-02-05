@@ -34,5 +34,6 @@ class View
     static public function pathFile()
     {
         echo __DIR__ . DIRECTORY_SEPARATOR . "file.csv";
+        return;
     }
 }

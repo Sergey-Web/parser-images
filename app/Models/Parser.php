@@ -9,7 +9,7 @@ class Parser
     static protected $_url;
     static protected $_pattLink = '#<a href=["\']([\w\/_\-:\.]{3,})\/?["\']#i';
     static protected $_pattImg = '#<img.+src=["\'](([\w\/_\-\.\:]+)\.(jpg|jpeg|svg|gif|png))["\']#i';
-    static protected $_pattDomain = '#(https:\/\/|http:\/\/|http:\/\/www\.|www\.|https:\/\/www\.)([\w\.]+)#i';
+    static protected $_pattDomain = '#(https:\/\/|http:\/\/(www\.)?|www\.|https:\/\/www\.)([\w\.]+)#i';
     static protected $_links;
     static protected $_check;
     static protected $_domain;
@@ -134,6 +134,6 @@ class Parser
     static public function getDomain($url)
     {
         preg_match(self::$_pattDomain, $url, $matches);
-        return $matches[2];
+        return $matches[3];
     }
 }
