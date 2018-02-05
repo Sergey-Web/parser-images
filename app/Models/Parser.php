@@ -96,7 +96,7 @@ class Parser
         }
         fclose($fp);
 
-        return $str;
+        return TRUE;
     }
 
     static protected function _delOvelapFile($domain)

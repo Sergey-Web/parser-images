@@ -19,7 +19,11 @@ class ParseController
     {
         $parser = new Parser(self::$_url);
 
-        $parser->getLink('images')->saveFile();
+        $res = $parser->getLink('images')->saveFile();
+
+        if(!$res) {
+            return "ERROR";
+        }
 
         return View::pathFile();
     }

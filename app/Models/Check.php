@@ -62,9 +62,4 @@ class Check
 
         return trim($getUrl);
     }
-
-    static public function findUrlFile()
-    {
-
-    }
 }

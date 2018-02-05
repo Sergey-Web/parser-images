@@ -33,7 +33,7 @@ class View
 
     static public function pathFile()
     {
-        echo __DIR__ . DIRECTORY_SEPARATOR . "file.csv";
+        echo __DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "file.csv";
         return;
     }
 }
