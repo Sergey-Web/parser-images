@@ -19,7 +19,7 @@ class ParseController
     {
         $parser = new Parser(self::$_url);
 
-        $res = $parser->getLink('images')->saveFile();
+        $res = $parser->getLink('links')->getLink('images')->saveFile();
 
         if(!$res) {
             return "ERROR";

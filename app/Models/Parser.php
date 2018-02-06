@@ -10,6 +10,7 @@ class Parser
     static protected $_pattLink = '#<a href=["\']([\w\/_\-:\.]{3,})\/?["\']#i';
     static protected $_pattImg = '#<img.+src=["\'](([\w\/_\-\.\:]+)\.(jpg|jpeg|svg|gif|png))["\']#i';
     static protected $_pattDomain = '#(https:\/\/|http:\/\/(www\.)?|www\.|https:\/\/www\.)([\w\.]+)#i';
+    static protected $_getLinks;
     static protected $_links;
     static protected $_check;
     static protected $_domain;
@@ -43,35 +44,60 @@ class Parser
         return $exec;
     }
 
+    static public function _getImgLinks($links, $pattern, $check)
+    {
+        $domain = self::$_domain;
+        $url = self::$_url;
+
+        foreach($links as $keyLink => $link) {
+            $exec = self::findUrl($link);
+            preg_match_all($pattern, $exec, $matches);
+
+            if(strpos($link, $domain) !== FALSE) {
+                $getLinks[] = $matches[1];
+            }
+        }
+
+        $arrayMerge = [];
+        foreach($getLinks as $getLink) {
+            $checkLink = self::_addProtocol($getLink, $url);
+            $arrayMerge = array_merge($arrayMerge, $checkLink);
+        }
+
+        self::$_links[$check] = array_merge($arrayMerge);
+    }
+
     public function getLink($check = 'links') 
     {
         $url = self::$_url;
         $exec = self::findUrl($url);
+        self::$_domain = self::getDomain($url);
 
         switch($check) {
             case "images": 
                 $pattern = self::$_pattImg;
-                 preg_match_all($pattern, $exec, $matches);
-                 $getLinks = $matches[1];
+
+                if(self::$_getLinks) {
+                    $getLinks = self::_getImgLinks(self::$_getLinks, $pattern, $check);
+                } else {
+                    preg_match_all($pattern, $exec, $matches);
+                    $getLinks = $matches[1];
+                    self::$_links[$check] = self::_addProtocol($getLinks, $url);
+                }
+
                 break;
             case "links":
                 $pattern = self::$_pattLink;
                  preg_match_all($pattern, $exec, $matches);
-                 $getLinks = $matches[0];
+                 self::$_getLinks = $matches[1];
                 break;
             default:
                 return FALSE;
                 break;
         }
 
-        if(empty($getLinks)) {
-            die();
-        }
-
         self::$_check = $check;
-        self::$_links[$check] = self::_addProtocol($getLinks, $url);
-        self::$_domain = self::getDomain($url);
-
+;
         return $this;
     }
 
